@@ -105,7 +105,7 @@ function listEvents(auth: any) {
             EVENTS.push({
               summary: event.summary,
               start: start,
-              link: event.description,
+              link: event.description ?? "",
               id: event.id,
             });
           }

@@ -1,5 +1,6 @@
 import TelegramBot from "node-telegram-bot-api";
 import "dotenv/config";
+import { parseMillisecondsIntoReadableTime } from "../utils";
 // replace the value below with the Telegram token you receive from @BotFather
 const token = process.env.TELEGRAM_TOKEN || "";
 
@@ -34,23 +35,26 @@ export function verifyDaily(EVENTS: any) {
 
         if (diff < 2.88e7) {
           // Less than 8 hours
-          console.log(`Tem daily hoje ${event.summary} => ${diff}`);
+          console.log(
+            `Tem daily hoje ${
+              event.summary
+            } => ${parseMillisecondsIntoReadableTime(diff)}`
+          );
 
-          const re = /href=[\'"]?([^\'" >]+)/;
-          const link = event.link.match(re);
-          const httpLink = link[0].replace('href="', "").replace('"', "");
+          const link = event.link.split(/\s+/)[3];
+          console.log(link);
 
           if (diff <= 300000 && diff >= 0 && !warnedsIds.includes(event.id)) {
             warnedsIds.push(event.id);
             event.warned = true;
-            bot.sendMessage(id, `Bora gente pra Daily! ${httpLink}`);
+            bot.sendMessage(id, `Bora gente pra Daily! ${link}`);
           } else if (
             diff <= 0 &&
             diff >= 60000 &&
             !startedIds.includes(event.id)
           ) {
             startedIds.push(event.id);
-            bot.sendMessage(id, `Gente estamos na Daily! ${httpLink}`);
+            bot.sendMessage(id, `Gente estamos na Daily! ${link}`);
           }
         }
       }

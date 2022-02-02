@@ -3,7 +3,6 @@ import { bot, verifyDaily } from "./telegram";
 
 function getEvents() {
   if (loadedCalendar) {
-    //console.log(EVENTS);
     console.log("Calendar loaded");
     return false;
   } else {
@@ -17,7 +16,7 @@ function verifyEvents() {
     verifyDaily(EVENTS);
     refreshEvents();
     verifyEvents();
-  }, 60000);
+  }, 5000);
 }
 
 function waitForCalendar() {
